@@ -51,7 +51,7 @@ func (inst *Template) init(fs embed.FS, tplNames []TemplateName) (templates Temp
 	return
 }
 
-func (inst *Template) Render(name TemplateName, params any) (cnt []byte, err error) {
+func (inst *Template) Render(name TemplateName, params any) (cnt *string, err error) {
 	meta := map[string]string{"name": name.String()}
 	tpl, ok := inst.tpls[name]
 	if !ok {
@@ -70,6 +70,7 @@ func (inst *Template) Render(name TemplateName, params any) (cnt []byte, err err
 		return
 	}
 
-	cnt = buffer.Bytes()
+	_cnt := buffer.String()
+	cnt = &_cnt
 	return
 }
