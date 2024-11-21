@@ -32,7 +32,7 @@ func (inst *Template) init(fs embed.FS, tplNames []TemplateName) (templates Temp
 		meta := map[string]string{"name": name.String()}
 		cnt, e := fs.ReadFile(name.String())
 		if err = e; err != nil {
-			err = errors.InternalServer(errors.RsnInternal, "read tpl cnt fail").WithCause(errors.Unrecoverable).WithMetadata(meta)
+			err = errors.InternalServer("Read tpl cnt fail", err.Error()).WithCause(errors.Unrecoverable).WithMetadata(meta)
 			return
 		}
 
@@ -41,7 +41,7 @@ func (inst *Template) init(fs embed.FS, tplNames []TemplateName) (templates Temp
 			Parse(string(cnt))
 
 		if err = e; err != nil {
-			err = errors.InternalServer(errors.RsnInternal, "parse template fail").WithCause(errors.Unrecoverable).WithMetadata(meta)
+			err = errors.InternalServer("Parse template fail", err.Error()).WithCause(errors.Unrecoverable).WithMetadata(meta)
 			return
 		}
 
@@ -66,7 +66,7 @@ func (inst *Template) Render(name TemplateName, params any) (cnt *string, err er
 		if e == nil {
 			meta["params"] = string(j)
 		}
-		err = errors.InternalServer(errors.RsnInternal, "render template fail").WithCause(errors.Unrecoverable).WithMetadata(meta)
+		err = errors.InternalServer("render template fail", err.Error()).WithCause(errors.Unrecoverable).WithMetadata(meta)
 		return
 	}
 
