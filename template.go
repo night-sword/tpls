@@ -4,6 +4,9 @@ import (
 	"bytes"
 	"embed"
 	"encoding/json"
+	"fmt"
+	"regexp"
+	"strings"
 	"text/template"
 
 	"github.com/Masterminds/sprig/v3"
@@ -48,6 +51,15 @@ func (inst *Template) init(fs embed.FS, tplNames []TemplateName) (templates Temp
 		templates[name] = tpl
 	}
 
+	return
+}
+
+func (inst *Template) RenderTrim(name TemplateName, params any, maxBlankLine int) (cnt *string, err error) {
+	cnt, err = inst.Render(name, params)
+
+	re := regexp.MustCompile(fmt.Sprintf(`\n{%d,}`, maxBlankLine+1))
+	replace := strings.Repeat("\n", maxBlankLine)
+	*cnt = re.ReplaceAllString(*cnt, replace)
 	return
 }
 
